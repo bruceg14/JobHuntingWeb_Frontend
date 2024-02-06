@@ -1,17 +1,58 @@
 import logo from './logo.svg';
 import './App.css';
 import { Box, Text, Heading, IconButton, HStack, Input, Card, Button, Divider, AbsoluteCenter,
-          Stat, StatLabel, StatNumber, StatHelpText, StatArrow, StatGroup, Link, } from '@chakra-ui/react'
+          Stat, StatLabel, StatNumber, StatHelpText, StatArrow, StatGroup, Link, useToast} from '@chakra-ui/react'
 import { EmailIcon, ExternalLinkIcon} from '@chakra-ui/icons'
 import React, { useState, useEffect } from 'react';
 import ApplicationDocument from './components/ApplicationDocument'
 
 
-function AddCourseCard({jobTitle , setJobTitle, company, setCompany, applicationLink, setApplicationLink}) {
+function AddCourseCard({jobTitle , setJobTitle, company, setCompany, applicationLink, setApplicationLink, date}) {
+  const toast = useToast();
+  function postApplication() {
+    fetch('https://jobhuntingwebbackend-production.up.railway.app/jobHunting/add', {
+      method: 'POST', 
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: new URLSearchParams({
+        'jobTitle': jobTitle,
+        'company': company,
+        'link': applicationLink,
+        'date': date
+      })
+    })
+    .then(response => response.text())
+    .then(data => {
+      if(data === "Saved") {
+        toast({
+          title: "Success.",
+          description: "Your application was submitted successfully.",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
+        setJobTitle("")
+        setCompany("")
+        setApplicationLink("")
+      }
+      console.log("response", data)
+    })
+    .catch(error => {
+      toast({
+        title: "Error.",
+        description: "There was a problem adding your applicaiton.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      console.error('There was a problem with your fetch operation:', error)
+    });
+  }
 
   return(
     <Card p={2}>
-      <Heading Heading as='h4' size='md'>
+      <Heading as='h4' size='md'>
         Add Today's New Application
       </Heading>
       <HStack spacing={4} mt={3}>
@@ -32,7 +73,7 @@ function AddCourseCard({jobTitle , setJobTitle, company, setCompany, application
         />
       </HStack>
       <Box mt={3}>
-        <Button> Add </Button>
+        <Button onClick={postApplication}> Add </Button>
       </Box>
     </Card>
   )
@@ -53,12 +94,15 @@ function App() {
   const [totalApp, setTotalApp] = useState(0)
   const [dates, setDates] = useState([]);
 
+  const [today, setToday] = useState("")
+
   useEffect(() => {
     const now = new Date()
     const utcOffset = now.getTimezoneOffset(); 
     const nyOffset = -5 * 60; 
     const today = new Date(now.getTime() + (nyOffset - utcOffset) * 60000); // Eastern time zone
     const previousDays = [today.toISOString().split('T')[0]];
+    setToday(previousDays[0])
 
     for (let i = 1; i <= 6; i++) {
       const previousDay = new Date(today);
@@ -67,7 +111,19 @@ function App() {
     }
 
     setDates(previousDays);
-    console.log(previousDays)
+    
+    fetch(`https://jobhuntingwebbackend-production.up.railway.app/jobHunting/all`)
+    .then(response => {
+      if(!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    }).then(data => {
+      setTotalApp(data.length)
+    })
+    .catch(error => {
+      console.error('There was a problem with your fetch operation:', error);
+    });
   }, []);
 
   return (
@@ -100,9 +156,11 @@ function App() {
             jobTitle={jobTitle}
             setJobTitle={setJobTitle}
             company={company}
-            setcompany={setCompany}
+            setCompany={setCompany}
             applicationLink={applicationLink}
-            setApplicationLink={setApplicationLink} />
+            setApplicationLink={setApplicationLink} 
+            date={today}
+            />
         </Box>
 
         {/* <Box position='relative' padding='10'>
@@ -113,17 +171,17 @@ function App() {
         </Box> */}
 
         <Box width="100%" display="flex">
-          <Box mt={8} width="50%">
+          <Box mt={8} width="60%">
             {dates.map((val, index) => {
               return(
-                <Box mb={5}>
+                <Box mb={5} key={`JobApplicationOn${val}`}>
                   <ApplicationDocument date={val}  />
                 </Box>
               )
             })}
           </Box>
           
-          <Box width="50%" mt={8} display="flex" justifyContent="end">
+          <Box width="40%" mt={8} display="flex" justifyContent="end">
             <Box>
               <Card padding={2} bg="green.100">
                 <Stat>

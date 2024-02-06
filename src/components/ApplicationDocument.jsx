@@ -4,7 +4,34 @@ import ApplicationCard from './ApplicationCard'
 
 function ApplicationDocument({date}) {
     const [listOfApplications, setListOfApplications] = useState([])
+    
+    const [listComponents, setListComponents] = useState(<Box></Box>)
+    useEffect(() => {
+        fetch(`https://jobhuntingwebbackend-production.up.railway.app/jobHunting/getByDate?date=${date}`)
+        .then(response => {
+            if(!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        }).then(data => {
+            console.log(date)
+            console.log(data); 
+            setListOfApplications(data)
 
+            const listOfApplications = <Box>
+                {data.map((val) => {
+                    return(
+                        <ApplicationCard key={`${val.company}'sJob`} jobTitle={val.jobTitle} company={val.company} link={val.link}/>
+                    )
+                })}
+                </Box>;
+
+            setListComponents(listOfApplications);
+          })
+          .catch(error => {
+            console.error('There was a problem with your fetch operation:', error);
+          });
+    }, [])
     
 
     return(
@@ -19,15 +46,23 @@ function ApplicationDocument({date}) {
 
                 <CardBody>
                     {listOfApplications.length === 0 ? 
-                    <Card bg="#DDDDDD">
+                    <Card bg="#333333">
                         <Box display="flex" justifyContent="center" p={2}>
-                            <Text>
+                            <Text color="white">
                                 No Job Applied This Day
                             </Text>
                         </Box>
                     </Card> 
                     : 
-                    <ApplicationCard />}
+                    <Box>
+                        {listOfApplications.map((val) => {
+                            return(
+                                <Box key={`${val.company}'sJob`} mb={3}>
+                                    <ApplicationCard  jobTitle={val.jobTitle} company={val.company} applicationLink={val.link}/>
+                                </Box>
+                            )
+                        })}
+                    </Box>}
 
                 </CardBody>
             </Card>
