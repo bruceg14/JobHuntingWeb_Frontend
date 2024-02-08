@@ -5,7 +5,7 @@ import { Box, Text, Heading, IconButton, HStack, Input, Card, Button, Divider, A
 import { EmailIcon, ExternalLinkIcon} from '@chakra-ui/icons'
 import React, { useState, useEffect } from 'react';
 import ApplicationDocument from './components/ApplicationDocument'
-
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
 function AddCourseCard({jobTitle , setJobTitle, company, setCompany, applicationLink, setApplicationLink, date}) {
   const toast = useToast();
@@ -79,11 +79,67 @@ function AddCourseCard({jobTitle , setJobTitle, company, setCompany, application
   )
 }
 
-function GraphApplication() {
-  return(
-    <Box>
+function GraphApplication({dates}) {
+  const [graphData, setGraphData] = useState([])
+  const newDates = dates.slice().reverse();
+  useEffect(() => {
+    let appPerDay = [];
+    const fetchAppNumber = Array.from(newDates).map(date => { 
+      return fetch(`https://jobhuntingwebbackend-production.up.railway.app/jobHunting/getByDate?date=${date}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          return data.length; 
+        })
+        .catch(error => {
+          console.error('There was a problem with your fetch operation:', error);
+          return 0; 
+        });
+    });
 
-    </Box>
+    Promise.all(fetchAppNumber).then(results => {
+      appPerDay = results; 
+      const data = appPerDay.map((val, index) => {
+        return {
+          Number: val,
+          Date: newDates[index] || "No date", 
+        };
+      });
+      
+      setGraphData(data)
+    }).catch(error => {
+      console.error('There was an error with the batch operation:', error);
+    });
+
+  }, [])
+  return(
+    <Card>
+      <Box display="flex" justifyContent="center">
+        <Heading as='h4' size='md'>
+          Chart of my recent job applications
+        </Heading>
+      </Box>
+      <ResponsiveContainer width="100%" aspect={3 / 1} >
+        <LineChart bg="red" data={graphData} margin={{ top: 15, right: 50, left: 30, bottom: 15 }}>
+          {/* <rect x={0} y={0} width="100%" height="100%" fill="#FFFFFF" /> */}
+          <YAxis dataKey="Number" label={{ value: "Number of Application", angle: -90, position: "insideCenter", offset: 10 }} />
+ 
+
+          <XAxis dataKey="Date" tickMargin={0} />
+          <Tooltip />
+          <CartesianGrid stroke="#222222" />
+          <Line type="monotone" dataKey="Number" stroke="#ff7300"  />
+          <Text x={0} y={20} textAnchor="left" dominantBaseline="hanging" fontWeight="bold" fontSize={20}>
+            Chart of my recent applications
+          </Text>
+          
+        </LineChart>
+      </ResponsiveContainer>
+    </Card>
   )
 }
 
@@ -95,6 +151,7 @@ function App() {
   const [dates, setDates] = useState([]);
 
   const [today, setToday] = useState("")
+  const [graph, setGraph] = useState(<Box></Box>)
 
   useEffect(() => {
     const now = new Date()
@@ -111,7 +168,7 @@ function App() {
     }
 
     setDates(previousDays);
-    
+    setGraph(<Box><GraphApplication dates={previousDays} /></Box>)
     fetch(`https://jobhuntingwebbackend-production.up.railway.app/jobHunting/all`)
     .then(response => {
       if(!response.ok) {
@@ -124,6 +181,11 @@ function App() {
     .catch(error => {
       console.error('There was a problem with your fetch operation:', error);
     });
+
+    
+
+    
+    
   }, []);
 
   return (
@@ -161,6 +223,10 @@ function App() {
             setApplicationLink={setApplicationLink} 
             date={today}
             />
+        </Box>
+
+        <Box width="100%" mt={6}>
+          {graph}
         </Box>
 
         {/* <Box position='relative' padding='10'>

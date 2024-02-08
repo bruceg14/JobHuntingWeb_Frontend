@@ -14,14 +14,12 @@ function ApplicationDocument({date}) {
             }
             return response.json();
         }).then(data => {
-            console.log(date)
-            console.log(data); 
             setListOfApplications(data)
 
             const listOfApplications = <Box>
                 {data.map((val) => {
                     return(
-                        <ApplicationCard key={`${val.company}'sJob`} jobTitle={val.jobTitle} company={val.company} link={val.link}/>
+                        <ApplicationCard key={`${val.company}/${val.jobTitle}`} jobTitle={val.jobTitle} company={val.company} link={val.link}/>
                     )
                 })}
                 </Box>;
@@ -57,7 +55,7 @@ function ApplicationDocument({date}) {
                     <Box>
                         {listOfApplications.map((val) => {
                             return(
-                                <Box key={`${val.company}'sJob`} mb={3}>
+                                <Box  key={`${val.company}/${val.jobTitle}`} mb={3}>
                                     <ApplicationCard  jobTitle={val.jobTitle} company={val.company} applicationLink={val.link}/>
                                 </Box>
                             )
