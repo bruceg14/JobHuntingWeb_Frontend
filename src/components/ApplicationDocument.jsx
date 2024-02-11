@@ -15,16 +15,6 @@ function ApplicationDocument({date}) {
             return response.json();
         }).then(data => {
             setListOfApplications(data)
-
-            const listOfApplications = <Box>
-                {data.map((val) => {
-                    return(
-                        <ApplicationCard key={`${val.company}/${val.jobTitle}`} jobTitle={val.jobTitle} company={val.company} link={val.link}/>
-                    )
-                })}
-                </Box>;
-
-            setListComponents(listOfApplications);
           })
           .catch(error => {
             console.error('There was a problem with your fetch operation:', error);
