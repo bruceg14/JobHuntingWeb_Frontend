@@ -207,7 +207,7 @@ function GraphApplication({dates}) {
       <ResponsiveContainer width="100%" aspect={3 / 1} >
         <LineChart bg="red" data={graphData} margin={{ top: 15, right: 50, left: 30, bottom: 15 }}>
           {/* <rect x={0} y={0} width="100%" height="100%" fill="#FFFFFF" /> */}
-          <YAxis dataKey="Number" label={{ value: "Number of Application", angle: -90, position: "insideCenter", offset: 10 }} />
+          <YAxis dataKey="Number" allowDecimals={false} label={{ value: "Number of Application", angle: -90, position: "insideCenter", offset: 10 }} />
  
 
           <XAxis dataKey="Date" tickMargin={0} />
