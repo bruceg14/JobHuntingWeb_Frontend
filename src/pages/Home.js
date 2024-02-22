@@ -10,6 +10,7 @@ import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tool
 import selfie from "../images/jhw_selfie.jpg"
 import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 import SearchByCompany from "../components/SearchByCompany"
+import StatDisplay from "../components/StatDisplay"
 
 // HeadBar is the top of the web page where it have an Icon for display my Resume
 // and a search bar that allow user to search base on company(Case insensitive)
@@ -132,8 +133,8 @@ function AddCourseCard({jobTitle , setJobTitle, company, setCompany, application
   }
 
   return(
-    <Card p={3}>
-      <Heading as='h4' size='md'>
+    <Card p={3} bg="#333333">
+      <Heading as='h4' size='md' color="white">
         Add Today's New Application
       </Heading>
       <HStack spacing={4} mt={3}>
@@ -154,7 +155,7 @@ function AddCourseCard({jobTitle , setJobTitle, company, setCompany, application
         />
       </HStack>
       <Box mt={3}>
-        <Button onClick={postApplication}> Add </Button>
+        <Button colorScheme='whatsapp' onClick={postApplication}> Add </Button>
       </Box>
     </Card>
   )
@@ -198,29 +199,32 @@ function GraphApplication({dates}) {
 
   }, [])
   return(
-    <Card>
-      <Box display="flex" justifyContent="center" mt={2}>
-        <Heading as='h4' size='md'>
-          Chart of my recent job applications
-        </Heading>
-      </Box>
-      <ResponsiveContainer width="100%" aspect={3 / 1} >
-        <LineChart bg="red" data={graphData} margin={{ top: 15, right: 50, left: 30, bottom: 15 }}>
-          {/* <rect x={0} y={0} width="100%" height="100%" fill="#FFFFFF" /> */}
-          <YAxis dataKey="Number" allowDecimals={false} label={{ value: "Number of Application", angle: -90, position: "insideCenter", offset: 10 }} />
- 
+    
+    <Box>
+      {/* <Card bg="rgba(255, 255, 255, 0)"> */}
+        <Box display="flex" justifyContent="center" mt={2}>
+          <Heading as='h4' size='md'>
+            Chart of my recent job applications
+          </Heading>
+        </Box>
+        <ResponsiveContainer width="100%" aspect={3 / 1} >
+          <LineChart bg="red" data={graphData} margin={{ top: 15, right: 50, left: 30, bottom: 15 }}>
+            {/* <rect x={0} y={0} width="100%" height="100%" fill="#FFFFFF" /> */}
+            <YAxis dataKey="Number" allowDecimals={false} label={{ value: "Number of Application", angle: -90, position: "insideCenter", offset: 10 }} />
+  
 
-          <XAxis dataKey="Date" tickMargin={0} />
-          <Tooltip />
-          <CartesianGrid stroke="#222222" />
-          <Line type="monotone" dataKey="Number" stroke="#ff7300"  />
-          <Text x={0} y={20} textAnchor="left" dominantBaseline="hanging" fontWeight="bold" fontSize={20}>
-            Chart of my recent applications
-          </Text>
-          
-        </LineChart>
-      </ResponsiveContainer>
-    </Card>
+            <XAxis dataKey="Date" tickMargin={0} />
+            <Tooltip />
+            <CartesianGrid stroke="#222222" />
+            <Line type="monotone" dataKey="Number" stroke="#ff7300"  />
+            <Text x={0} y={20} textAnchor="left" dominantBaseline="hanging" fontWeight="bold" fontSize={20}>
+              Chart of my recent applications
+            </Text>
+            
+          </LineChart>
+        </ResponsiveContainer>
+      {/* </Card> */}
+    </Box>
   )
 }
 
@@ -251,18 +255,18 @@ function HomePage() {
 
     setDates(previousDays);
     setGraph(<Box><GraphApplication dates={previousDays} /></Box>)
-    fetch(`https://jobhuntingwebbackend-production.up.railway.app/jobHunting/all`)
-    .then(response => {
-      if(!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    }).then(data => {
-      setTotalApp(data.length)
-    })
-    .catch(error => {
-      console.error('There was a problem with your fetch operation:', error);
-    });
+    // fetch(`https://jobhuntingwebbackend-production.up.railway.app/jobHunting/all`)
+    // .then(response => {
+    //   if(!response.ok) {
+    //     throw new Error('Network response was not ok');
+    //   }
+    //   return response.json();
+    // }).then(data => {
+    //   setTotalApp(data.length)
+    // })
+    // .catch(error => {
+    //   console.error('There was a problem with your fetch operation:', error);
+    // });
 
     
 
@@ -281,7 +285,7 @@ function HomePage() {
         
           <Box>
             <Heading fontSize='2xl'>
-              Bruce's Job Hunting Web Project
+              Bruce's Job Hunting Record
             </Heading>
           </Box>
 
@@ -295,9 +299,19 @@ function HomePage() {
           </Box>
         </Box>
 
-        <Box mt={6}>
+        {/* <Box mt={6}>
           <Text>This is my personal website to document my job application process. For privacy reason I will only share my job application experience for the previous 7 days. </Text>
+        </Box> */}
+
+        <Box mt={8} mb={8}>
+          <StatDisplay today={today} />
         </Box>
+
+        <Box width="100%" mt={6}>
+          {graph}
+        </Box>
+          
+        
 
         <Box mt={8}>
           <AddCourseCard 
@@ -309,10 +323,6 @@ function HomePage() {
             setApplicationLink={setApplicationLink} 
             date={today}
             />
-        </Box>
-
-        <Box width="100%" mt={6}>
-          {graph}
         </Box>
 
         {/* <Box position='relative' padding='10'>
@@ -335,13 +345,13 @@ function HomePage() {
           
           <Box width="40%" mt={8} display="flex" justifyContent="end">
             <Box>
-              <Card padding={2} bg="green.100">
+              {/* <Card padding={2} bg="green.100">
                 <Stat>
                   <StatLabel>Total application send</StatLabel>
                   <StatNumber>{totalApp}</StatNumber>
                   <StatHelpText>Since February 2024</StatHelpText>
                 </Stat>
-              </Card>
+              </Card> */}
             </Box>
           </Box>
         </Box>
