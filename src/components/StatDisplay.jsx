@@ -3,11 +3,11 @@ import { Box, Text, Heading, IconButton, HStack, Card, Button, CardHeader, CardB
             StatLabel, StatArrow, StatNumber, StatHelpText, StatGroup} from '@chakra-ui/react'
 
 function StatDisplay({today}) {
-    const [highestApplication, setHighestApplication] = useState([null, null])
+    const [highestApplication, setHighestApplication] = useState([today, 0])
     const [totalApp, setTotalApp] = useState(0)
     const [todayNumber, setTodayNumber] = useState(0)
     useEffect(() => {
-        const url = `http://localhost:8080/jobHunting/getHighestDate`
+        const url = `https://jobhuntingwebbackend-production.up.railway.app/jobHunting/getHighestDate`
         fetch(url).
         then(response => {
             if(!response.ok){
