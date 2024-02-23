@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Text, Heading, IconButton, HStack, Card, Button, CardHeader, CardBody} from '@chakra-ui/react'
+import { Box, Text, Card, CardHeader, CardBody, Heading} from '@chakra-ui/react'
 import ApplicationCard from './ApplicationCard'
 
 function ApplicationDocument({date}) {
@@ -19,7 +19,7 @@ function ApplicationDocument({date}) {
           .catch(error => {
             console.error('There was a problem with your fetch operation:', error);
           });
-    }, [])
+    })
     
 
     return(

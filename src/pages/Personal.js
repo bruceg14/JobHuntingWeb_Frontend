@@ -1,14 +1,9 @@
-import { Box, Text, Heading, IconButton, HStack, Input, Card, Button, Divider, AbsoluteCenter,
-    Stat, StatLabel, StatNumber, StatHelpText, StatArrow, StatGroup, Link, useToast, Avatar,
-    InputGroup, InputLeftElement, Icon} from '@chakra-ui/react'
-import { EmailIcon, ExternalLinkIcon, SearchIcon, ArrowBackIcon} from '@chakra-ui/icons'
-import React, { useState, useEffect } from 'react';
-import ApplicationDocument from '../components/ApplicationDocument'
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { Box, Heading, IconButton } from '@chakra-ui/react'
+import { ArrowBackIcon} from '@chakra-ui/icons'
+import React from 'react';
 import selfie from "../images/jhw_selfie.jpg"
-import { Link as RouterLink } from 'react-router-dom';
 import Resume from "../images/Resume.pdf"
-import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function Personal() {
     let navigate = useNavigate();

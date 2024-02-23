@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Text, Heading, IconButton, HStack, Card, Button, CardHeader, CardBody, Spinner} from '@chakra-ui/react'
+import { Box, Text, Card, Spinner} from '@chakra-ui/react'
 import ApplicationCard from './ApplicationCard'
 
 function SearchByCompany({company}) {
@@ -21,7 +21,7 @@ function SearchByCompany({company}) {
           console.error('There was a problem with your fetch operation:', error);
           return 0; 
         });
-    }, [])
+    }, [company])
 
     if(isLoading) {
         return(

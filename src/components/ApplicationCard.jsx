@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Text, Heading, IconButton, HStack, Card, Button, Link, CardHeader, CardBody, CardFooter} from '@chakra-ui/react'
+import React from 'react';
+import { Box, Text, Heading, Card, Link} from '@chakra-ui/react'
 import { ExternalLinkIcon} from '@chakra-ui/icons'
 
 function ApplicationCard({jobTitle, company, applicationLink}) {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Text, Heading, IconButton, HStack, Card, Button, CardHeader, CardBody, Spinner, Stat,
-            StatLabel, StatArrow, StatNumber, StatHelpText, StatGroup} from '@chakra-ui/react'
+import { Box, Card, CardBody, Stat,
+            StatLabel, StatNumber, StatHelpText} from '@chakra-ui/react'
 
 function StatDisplay({today}) {
     const [highestApplication, setHighestApplication] = useState([today, 0])
@@ -8,8 +8,7 @@ function StatDisplay({today}) {
     const [todayNumber, setTodayNumber] = useState(0)
     useEffect(() => {
         const url = `https://jobhuntingwebbackend-production.up.railway.app/jobHunting/getHighestDate`
-        fetch(url).
-        then(response => {
+        fetch(url).then(response => {
             if(!response.ok){
                 throw new Error('Erro fetching the highest applications send in a day');
             }
@@ -50,7 +49,7 @@ function StatDisplay({today}) {
         .catch(error => {
           console.error('There was a problem with your fetch operation:', error);
         });
-    }, [])
+    })
 
     // if(today == ""){
     //     return(

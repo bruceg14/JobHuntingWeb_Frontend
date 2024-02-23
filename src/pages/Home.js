@@ -1,12 +1,12 @@
 import '../App.css';
-import { Box, Text, Heading, IconButton, HStack, Input, Card, Button, Divider, AbsoluteCenter,
-          Stat, StatLabel, StatNumber, StatHelpText, StatArrow, StatGroup, Link, useToast, Avatar,
-          InputGroup, InputLeftElement, Icon, Link as ChakraLink, LinkProps, useDisclosure,
+import { Box, Text, Heading, HStack, Input, Card, Button,
+          Link, useToast, Avatar,
+          InputGroup, InputLeftElement, Link as ChakraLink,
           Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter} from '@chakra-ui/react'
-import { EmailIcon, ExternalLinkIcon, SearchIcon,} from '@chakra-ui/icons'
+import {ExternalLinkIcon, SearchIcon,} from '@chakra-ui/icons'
 import React, { useState, useEffect } from 'react';
 import ApplicationDocument from '../components/ApplicationDocument'
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
 import selfie from "../images/jhw_selfie.jpg"
 import { Link as ReactRouterLink, useNavigate } from 'react-router-dom';
 import SearchByCompany from "../components/SearchByCompany"
@@ -14,7 +14,7 @@ import StatDisplay from "../components/StatDisplay"
 
 // HeadBar is the top of the web page where it have an Icon for display my Resume
 // and a search bar that allow user to search base on company(Case insensitive)
-function HeadBar({}) {
+function HeadBar() {
   const [company, setCompany] = useState("")
   const [isOpen, setIsOpen] = useState(false);
   let navigate = useNavigate();
@@ -235,7 +235,7 @@ function HomePage() {
   const [jobTitle, setJobTitle] = useState("");
   const [company, setCompany] = useState("");
   const [applicationLink, setApplicationLink] = useState("");
-  const [totalApp, setTotalApp] = useState(0)
+  // const [totalApp, setTotalApp] = useState(0)
   const [dates, setDates] = useState([]);
   
   const [today, setToday] = useState("")
