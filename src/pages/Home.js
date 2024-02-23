@@ -142,16 +142,19 @@ function AddCourseCard({jobTitle , setJobTitle, company, setCompany, application
           placeholder="Job Title" 
           value={jobTitle} 
           onChange={(e) => setJobTitle(e.target.value)} 
+          style={{color: "white"}}
         />
         <Input 
           placeholder="Company" 
           value={company} 
           onChange={(e) => setCompany(e.target.value)} 
+          style={{color: "white"}}
         />
         <Input 
           placeholder="Application Link" 
           value={applicationLink} 
           onChange={(e) => setApplicationLink(e.target.value)} 
+          style={{color: "white"}}
         />
       </HStack>
       <Box mt={3}>
