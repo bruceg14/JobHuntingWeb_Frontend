@@ -17,7 +17,7 @@ function StatDisplay({today}) {
         }).then(data => {
             setHighestApplication(data)
         })
-
+        
         fetch(`https://jobhuntingwebbackend-production.up.railway.app/jobHunting/all`)
         .then(response => {
         if(!response.ok) {
@@ -25,7 +25,7 @@ function StatDisplay({today}) {
         }
         return response.json();
         }).then(data => {
-        setTotalApp(data.length)
+            setTotalApp(data.length)
         })
         .catch(error => {
         console.error('There was a problem with your fetch operation:', error);
@@ -38,14 +38,27 @@ function StatDisplay({today}) {
           }
           return response.json();
         })
-        .then(data => {
-         
-          setTodayNumber(data.length)
-        })
+        .then(data => 
+            {
+                if (Array.isArray(data)) {
+                    setTodayNumber(data.length);
+                  } else {
+                    console.error('Expected an array but received:', data);
+                  }
+            }
+        )
         .catch(error => {
           console.error('There was a problem with your fetch operation:', error);
         });
     }, [])
+
+    // if(today == ""){
+    //     return(
+    //         <Box>
+    //             <Text>Hee </Text>
+    //         </Box>
+    //     )
+    // }
     
     return(
         <Card p={3}>
@@ -73,7 +86,7 @@ function StatDisplay({today}) {
                     </Box>
                 </Box>
 
-                <Box width="25%" display='flex' justifyContent='center'>
+                {/* <Box width="25%" display='flex' justifyContent='center'>
                     <Box>
                         <Stat >
                             <StatLabel >Application Send Today</StatLabel>
@@ -83,7 +96,7 @@ function StatDisplay({today}) {
                             </StatHelpText>
                         </Stat>
                     </Box>
-                </Box>
+                </Box> */}
             
             </Box>
         </Card>
